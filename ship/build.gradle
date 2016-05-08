@@ -9,16 +9,35 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.github.rholder:gradle-one-jar:1.0.4'
     }
 }
 
+project.ext {
+    dropwizardVersion = '1.0.0-rc2'
+}
+
 apply plugin: "kotlin"
+apply plugin: 'gradle-one-jar'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile(
+            "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
+            "io.dropwizard:dropwizard-core:$dropwizardVersion",
+            "com.fasterxml.jackson.module:jackson-module-kotlin:2.7.1-2",
+            "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.7.4"
+    )
 }
 
+task oneJar(type: OneJar) {
+    mainClass = 'com.worldsim.ship.ShipService'
+    archiveName = 'koala.jar'
+}
+
+artifacts {
+    oneJar
+}
